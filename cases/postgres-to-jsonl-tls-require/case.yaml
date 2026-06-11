@@ -1,0 +1,35 @@
+case:
+  name: postgres-to-jsonl-tls-require
+  description: >
+    Reads 100k rows from Postgres over TLS (mode: require) — validates that the
+    rustls + rustls-rustcrypto stack can negotiate a TLS handshake with a real
+    Postgres server. No certificate verification; this is the "useSSL=true" equivalent.
+  tags: [postgres, jsonl, tls, smoke]
+
+services:
+  - image: images/postgres-15
+    alias: pg
+    env:
+      - LOADSMITH_ENABLE_SSL=on
+    readiness:
+      tcp: 5432
+      timeout_seconds: 300
+      postgres:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+loadsmith:
+  image: loadsmith:latest
+
+pipeline:
+  file: pipeline.yaml
+
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000
+  output:
+    file: events.jsonl
+    row_count: 100000

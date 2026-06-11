@@ -1,0 +1,33 @@
+case:
+  name: postgres-to-jsonl
+  description: Reads 100k rows from PostgreSQL and writes them to JSONL
+  tags: [postgres, jsonl, smoke]
+
+services:
+  - image: images/postgres-15
+    alias: pg
+    readiness:
+      tcp: 5432
+      timeout_seconds: 300
+      postgres:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+# `image` is the published image used by the default (remote) path.
+# With --local the lab builds loadsmith:local from ../loadsmith and ignores it.
+# The output dir is mounted at /output automatically; the pipeline writes there.
+loadsmith:
+  image: loadsmith:latest
+
+pipeline:
+  file: pipeline.yaml
+
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000
+  output:
+    file: events.jsonl   # validated under the host side of the /output mount
+    row_count: 100000

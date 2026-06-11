@@ -1,0 +1,14 @@
+bundle:
+  name: parquet-destination
+  description: Validates the parquet destination in single-file and chunked modes
+
+# Each entry reuses an existing case unchanged, then runs hook scripts that live
+# *inside the bundle image* (built from this dir's Dockerfile). validate/cleanup
+# get the run's output dir bind-mounted at /output (also passed as argv[1]).
+cases:
+  - case: catalog/postgres-to-parquet-single
+    validate: /scripts/check_single_file.py
+    cleanup: /scripts/cleanup.sh
+  - case: catalog/postgres-to-parquet-chunked
+    validate: /scripts/check_chunks.py
+    cleanup: /scripts/cleanup.sh

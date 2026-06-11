@@ -1,0 +1,9 @@
+bundle:
+  name: tls-spike
+  description: >
+    Validates the rustls + rustls-rustcrypto TLS stack against real database
+    servers. Each case proves a handshake; MySQL and other sources will be added
+    here as their plugins are built.
+
+cases:
+  - case: catalog/postgres-to-jsonl-tls-require

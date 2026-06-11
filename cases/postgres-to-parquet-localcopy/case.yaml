@@ -1,0 +1,31 @@
+case:
+  name: postgres-to-parquet-localcopy
+  description: Reads 100k rows, writes chunked Parquet to a staging dir, and delivers each chunk via the local-copy sink
+  tags: [postgres, parquet, sink, smoke]
+
+services:
+  - image: images/postgres-15
+    alias: pg
+    readiness:
+      tcp: 5432
+      timeout_seconds: 300
+      postgres:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+loadsmith:
+  image: loadsmith:latest
+
+pipeline:
+  file: pipeline.yaml
+
+# Parquet is binary and split across chunk files the line-counting `output:`
+# check can't validate, so (as with the other parquet cases) only the run
+# summary's row counts are asserted — enough to prove the source streams
+# end-to-end and the sink delivers every finalized chunk to /output.
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000

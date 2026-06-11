@@ -1,0 +1,34 @@
+case:
+  name: postgres-to-parquet-chunked
+  description: Reads 100k rows from PostgreSQL and writes them across multiple chunked Parquet files
+  tags: [postgres, parquet, smoke]
+
+services:
+  - image: images/postgres-15
+    alias: pg
+    readiness:
+      tcp: 5432
+      timeout_seconds: 300
+      postgres:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+# `image` is the published image used by the default (remote) path.
+# With --local the lab builds loadsmith:local from ../loadsmith and ignores it.
+# The output dir is mounted at /output automatically; the pipeline writes there.
+loadsmith:
+  image: loadsmith:latest
+
+pipeline:
+  file: pipeline.yaml
+
+# Parquet output is binary and split across multiple chunk files, neither of
+# which the lab's line-counting `output:` check can validate. As with the
+# postgres-to-null cases, only the run summary's row counts are asserted —
+# enough to prove the plugin streams end-to-end and counts correctly.
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000

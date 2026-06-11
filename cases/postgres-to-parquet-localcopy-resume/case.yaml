@@ -1,0 +1,32 @@
+case:
+  name: postgres-to-parquet-localcopy-resume
+  description: Crashes the sink mid-delivery (LOADSMITH_SINK_CRASH_AFTER) and asserts the core respawns it and delivers every chunk
+  tags: [postgres, parquet, sink, resilience]
+
+services:
+  - image: images/postgres-15
+    alias: pg
+    readiness:
+      tcp: 5432
+      timeout_seconds: 300
+      postgres:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+loadsmith:
+  image: loadsmith:latest
+  # Fault injection: the local-copy sink aborts once after 2 deliveries. The
+  # core's sink supervisor must respawn it and resume from the delivery ledger,
+  # so the run still succeeds with all rows accounted for.
+  env:
+    - LOADSMITH_SINK_CRASH_AFTER=2
+
+pipeline:
+  file: pipeline.yaml
+
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000

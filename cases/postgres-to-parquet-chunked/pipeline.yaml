@@ -1,0 +1,23 @@
+pipeline:
+  name: postgres-to-parquet-chunked
+
+source:
+  type: postgres
+  config:
+    host: pg
+    port: 5432
+    dbname: lab
+    user: lab
+    password: lab
+    query: "SELECT * FROM spacecraft_telemetry_events ORDER BY event_sequence"
+    batch_size: 2000
+
+destination:
+  type: parquet
+  config:
+    path: /output
+    prefix: events
+    compression: snappy
+    # Small cap so the 100k-row dataset rolls across several chunk files,
+    # exercising rotation rather than landing in a single file.
+    max_file_size: "512KiB"

@@ -1,0 +1,32 @@
+case:
+  name: postgres-to-null-15M
+  description: Reads 15M rows from PostgreSQL into the null sink (no output) — pure read/pump throughput
+  tags: [postgres, "null", volume, throughput]
+
+services:
+  - image: images/postgres-15
+    alias: pg
+    readiness:
+      tcp: 5432
+      timeout_seconds: 180
+      postgres:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+# `image` is the published image used by the default (remote) path.
+# With --local the lab builds loadsmith:local from ../loadsmith and ignores it.
+loadsmith:
+  image: loadsmith:latest
+
+pipeline:
+  file: pipeline.yaml
+
+# The null sink writes nothing, so there is no output file to check — only the
+# row counts from the summary are asserted. This case is safe on a tmpfs /tmp
+# (no 15 GB JSONL is produced).
+expect:
+  status: success
+  rows_read: 15000000
+  rows_written: 15000000

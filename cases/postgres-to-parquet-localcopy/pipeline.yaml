@@ -1,0 +1,31 @@
+pipeline:
+  name: postgres-to-parquet-localcopy
+
+source:
+  type: postgres
+  config:
+    host: pg
+    port: 5432
+    dbname: lab
+    user: lab
+    password: lab
+    query: "SELECT * FROM spacecraft_telemetry_events ORDER BY event_sequence"
+    batch_size: 2000
+
+# No `path`: the core allocates a staging scratch dir inside the container, the
+# parquet destination writes chunks there, and the sink delivers each chunk —
+# proving format (parquet) and destination (S3-style delivery) are decoupled
+# without an `s3_parquet` plugin.
+destination:
+  type: parquet
+  config:
+    prefix: events
+    compression: snappy
+    max_file_size: "512KiB"
+
+# Separate top-level block: delivery is a distinct lifecycle phase, coupled to
+# the destination only at runtime (the core forwards each finalized file).
+sink:
+  type: local-copy
+  config:
+    dest: /output

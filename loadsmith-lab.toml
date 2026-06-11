@@ -1,0 +1,17 @@
+# loadsmith-lab catalog manifest — a minimal index of what this origin offers.
+# Names map to conventional paths: `cases.<name>` -> cases/<name>/,
+# `bundles.<name>` -> bundles/<name>/. Add an entry here when you add content.
+
+[cases]
+postgres-to-jsonl                   = "Reads 100k rows from PostgreSQL and writes them to JSONL (content/type smoke test)"
+postgres-to-jsonl-tls-require       = "Reads 100k rows from Postgres over TLS (mode: require) — rustls handshake validation"
+postgres-to-null-5M                 = "Reads 5M rows into the null sink — pure read/pump throughput"
+postgres-to-null-15M                = "Reads 15M rows into the null sink — pure read/pump throughput"
+postgres-to-parquet-single          = "Reads 100k rows and writes a single Parquet file"
+postgres-to-parquet-chunked         = "Reads 100k rows and writes multiple chunked Parquet files"
+postgres-to-parquet-localcopy       = "Chunked Parquet to a staging dir, delivered via the local-copy sink"
+postgres-to-parquet-localcopy-resume = "Crashes the sink mid-delivery and asserts the core respawns it and delivers every chunk"
+
+[bundles]
+parquet-destination = "Validates the parquet destination in single-file and chunked modes"
+tls-spike           = "Validates the rustls + rustls-rustcrypto TLS stack against real database servers"
