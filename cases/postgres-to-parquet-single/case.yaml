@@ -15,12 +15,6 @@ services:
         password: lab
         probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
 
-# `image` is the published image used by the default (remote) path.
-# With --local the lab builds loadsmith:local from ../loadsmith and ignores it.
-# The output dir is mounted at /output automatically; the pipeline writes there.
-loadsmith:
-  image: loadsmith:latest
-
 pipeline:
   file: pipeline.yaml
 

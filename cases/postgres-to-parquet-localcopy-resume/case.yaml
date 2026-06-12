@@ -16,7 +16,6 @@ services:
         probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
 
 loadsmith:
-  image: loadsmith:latest
   # Fault injection: the local-copy sink aborts once after 2 deliveries. The
   # core's sink supervisor must respawn it and resume from the delivery ledger,
   # so the run still succeeds with all rows accounted for.

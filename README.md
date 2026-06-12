@@ -49,8 +49,8 @@ read live, no install):
 
 ```bash
 loadsmith-lab origin local add catalog ../loadsmith-lab-canonical-catalog
-loadsmith-lab run --local --select catalog/postgres-to-jsonl
-loadsmith-lab bundle run --local --select catalog/parquet-destination
+loadsmith-lab run --select catalog/postgres-to-jsonl
+loadsmith-lab bundle run --select catalog/parquet-destination
 ```
 
 A case's `services[].image` references an image from the

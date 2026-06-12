@@ -54,6 +54,6 @@ This repo has no build step. Verify a case or bundle by running it through the
 ```bash
 cd ../loadsmith-lab
 ./target/debug/loadsmith-lab origin local add catalog ../loadsmith-lab-canonical-catalog   # once
-./target/debug/loadsmith-lab run --local --select catalog/<name>
-./target/debug/loadsmith-lab bundle run --local --select catalog/<bundle-name>
+./target/debug/loadsmith-lab run --select catalog/<name>
+./target/debug/loadsmith-lab bundle run --select catalog/<bundle-name>
 ```

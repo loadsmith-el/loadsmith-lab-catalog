@@ -15,9 +15,6 @@ services:
         password: lab
         probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
 
-loadsmith:
-  image: loadsmith:latest
-
 pipeline:
   file: pipeline.yaml
 
