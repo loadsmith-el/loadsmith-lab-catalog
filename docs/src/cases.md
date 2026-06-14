@@ -1,0 +1,26 @@
+# Cases
+
+A **case** is a single Loadsmith pipeline run against one or more services, with
+a readiness probe and an `expect` block asserting the outcome.
+
+| Case | Description |
+|---|---|
+| `postgres-to-jsonl` | Reads 100k rows from PostgreSQL and writes them to JSONL (content/type smoke test) |
+| `postgres-to-jsonl-tls-require` | Reads 100k rows from Postgres over TLS (`mode: require`) — rustls handshake validation |
+| `postgres-to-null-5M` | Reads 5M rows into the null sink — pure read/pump throughput |
+| `postgres-to-null-15M` | Reads 15M rows into the null sink — pure read/pump throughput |
+| `postgres-to-parquet-single` | Reads 100k rows and writes a single Parquet file |
+| `postgres-to-parquet-chunked` | Reads 100k rows and writes multiple chunked Parquet files |
+| `postgres-to-parquet-localcopy` | Chunked Parquet to a staging dir, delivered via the local-copy sink |
+| `postgres-to-parquet-localcopy-resume` | Crashes the sink mid-delivery and asserts the core respawns it and delivers every chunk |
+
+## Two distinct purposes
+
+- **Smoke / content cases** (e.g. `postgres-to-jsonl`) validate real
+  content and type round-trips on the 100k-row canonical dataset, with an
+  `output:` block asserting what was written.
+- **Volume / throughput cases** (e.g. `postgres-to-null-15M`) inflate row counts
+  to measure pure read/pump throughput. They write to the `null` destination and
+  assert only `rows_read` / `rows_written` — never an `output:` block (a
+  multi-million-row file would be gigabytes). See
+  [Writing a Case or Bundle](./writing.md) for why this rule is strict.

@@ -1,5 +1,7 @@
 # loadsmith-lab-canonical-catalog
 
+> 📖 **Full documentation:** <https://loadsmith-el.github.io/loadsmith-lab-canonical-catalog/>
+
 The **`catalog` origin** for [loadsmith-lab](../loadsmith-lab): test cases and
 bundles for [Loadsmith](../loadsmith). This repo ships no code — just
 declarative YAML (and the small Dockerfiles bundles need for their hook
