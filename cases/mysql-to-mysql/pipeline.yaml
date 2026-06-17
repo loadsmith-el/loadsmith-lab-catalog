@@ -1,0 +1,24 @@
+pipeline:
+  name: mysql-to-mysql-atomic
+
+source:
+  type: mysql
+  config:
+    host: mysql
+    port: 3306
+    dbname: lab
+    user: lab
+    password: lab
+    query: "SELECT * FROM spacecraft_telemetry_events ORDER BY event_sequence"
+    batch_size: 2000
+
+destination:
+  type: mysql
+  config:
+    host: mysql
+    port: 3306
+    dbname: lab
+    user: lab
+    password: lab
+    target_table: events_sink
+    mode: atomic

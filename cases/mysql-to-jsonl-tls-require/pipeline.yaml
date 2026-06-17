@@ -1,0 +1,21 @@
+pipeline:
+  name: mysql-to-jsonl-tls-require
+  description: Telemetry export over TLS (mode require) — rustls spike validation
+
+source:
+  type: mysql
+  config:
+    host: mysql
+    port: 3306
+    dbname: lab
+    user: lab
+    password: lab
+    query: "SELECT * FROM spacecraft_telemetry_events ORDER BY event_sequence"
+    batch_size: 2000
+    tls:
+      mode: require
+
+destination:
+  type: jsonl
+  config:
+    path: /output/events.jsonl

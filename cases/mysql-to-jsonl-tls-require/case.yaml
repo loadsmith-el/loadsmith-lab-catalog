@@ -1,0 +1,31 @@
+case:
+  name: mysql-to-jsonl-tls-require
+  description: >
+    Reads 100k rows from MySQL over TLS (mode: require) — validates that the
+    rustls + rustls-rustcrypto stack negotiates a TLS handshake with a real
+    MySQL server. No certificate verification; this is the "useSSL=true"
+    equivalent. MySQL 8 ships TLS enabled with auto-generated certificates.
+  tags: [mysql, jsonl, tls, smoke]
+
+services:
+  - image: images/lab-mysql-8
+    alias: mysql
+    readiness:
+      tcp: 3306
+      timeout_seconds: 300
+      mysql:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+pipeline:
+  file: pipeline.yaml
+
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000
+  output:
+    file: events.jsonl
+    row_count: 100000

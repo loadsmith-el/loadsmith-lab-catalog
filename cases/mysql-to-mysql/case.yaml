@@ -1,0 +1,28 @@
+case:
+  name: mysql-to-mysql
+  description: >
+    Loads 100k rows into MySQL (atomic mode) and asserts every row was committed.
+    Validates the MySQL destination end-to-end — connect, batched INSERT, COMMIT —
+    via the run summary (rows_written), reading the canonical table and writing
+    into the pre-created empty events_sink table.
+  tags: [mysql, destination, smoke]
+
+services:
+  - image: images/lab-mysql-8
+    alias: mysql
+    readiness:
+      tcp: 3306
+      timeout_seconds: 300
+      mysql:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+pipeline:
+  file: pipeline.yaml
+
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000

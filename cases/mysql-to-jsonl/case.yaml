@@ -1,0 +1,27 @@
+case:
+  name: mysql-to-jsonl
+  description: Reads 100k rows from MySQL and writes them to JSONL
+  tags: [mysql, jsonl, smoke]
+
+services:
+  - image: images/lab-mysql-8
+    alias: mysql
+    readiness:
+      tcp: 3306
+      timeout_seconds: 300
+      mysql:
+        dbname: lab
+        user: lab
+        password: lab
+        probe_query: "SELECT 1 FROM spacecraft_telemetry_events LIMIT 1"
+
+pipeline:
+  file: pipeline.yaml
+
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000
+  output:
+    file: events.jsonl   # validated under the host side of the /output mount
+    row_count: 100000

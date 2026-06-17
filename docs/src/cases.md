@@ -13,6 +13,11 @@ a readiness probe and an `expect` block asserting the outcome.
 | `postgres-to-parquet-chunked` | Reads 100k rows and writes multiple chunked Parquet files |
 | `postgres-to-parquet-localcopy` | Chunked Parquet to a staging dir, delivered via the local-copy sink |
 | `postgres-to-parquet-localcopy-resume` | Crashes the sink mid-delivery and asserts the core respawns it and delivers every chunk |
+| `mysql-to-jsonl` | Reads 100k rows from MySQL and writes them to JSONL (content/type smoke test) |
+| `mysql-to-jsonl-native` | Reads 100k rows from MySQL via the legacy `mysql_native_password` auth plugin — auth-mode coverage |
+| `mysql-to-jsonl-tls-require` | Reads 100k rows from MySQL over TLS (`mode: require`) — rustls handshake validation |
+| `mysql-to-mysql` | Loads 100k rows into MySQL (`atomic` mode) — destination smoke test |
+| `mysql-to-mysql-staged-merge` | Loads 100k rows into MySQL via `staged_merge` (ON DUPLICATE KEY upsert by `id`) |
 
 ## Two distinct purposes
 
