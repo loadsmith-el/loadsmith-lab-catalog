@@ -2,8 +2,8 @@
 
 > 📖 **Full documentation:** <https://loadsmith-el.github.io/loadsmith-lab-canonical-catalog/>
 
-The **`catalog` origin** for [loadsmith-lab](../loadsmith-lab): test cases and
-bundles for [Loadsmith](../loadsmith). This repo ships no code — just
+The **`catalog` origin** for [loadsmith-lab](https://github.com/loadsmith-el/loadsmith-lab): test cases and
+bundles for [Loadsmith](https://github.com/loadsmith-el/loadsmith). This repo ships no code — just
 declarative YAML (and the small Dockerfiles bundles need for their hook
 scripts).
 
@@ -61,15 +61,15 @@ loadsmith-lab bundle run --select catalog/parquet-destination
 ```
 
 A case's `services[].image` references an image from the
-[`loadsmith-lab-canonical-images`](../loadsmith-lab-canonical-images) repo as `images/<name>`.
+[`loadsmith-lab-canonical-images`](https://github.com/loadsmith-el/loadsmith-lab-canonical-images) repo as `images/<name>`.
 
 ## Writing a case or bundle
 
-See the [loadsmith-lab docs](../loadsmith-lab/docs/src):
-- [Writing Cases](../loadsmith-lab/docs/src/writing-cases)
-- [Writing Bundles](../loadsmith-lab/docs/src/writing-bundles/bundle-yaml.md)
-- [`case.yaml` schema](../loadsmith-lab/crates/loadsmith-lab-runner/src/case.rs)
-- [`bundle.yaml` schema](../loadsmith-lab/docs/src/reference/bundle-yaml-schema.md)
+See the [loadsmith-lab docs](https://github.com/loadsmith-el/loadsmith-lab/blob/main/docs/src):
+- [Writing Cases](https://github.com/loadsmith-el/loadsmith-lab/blob/main/docs/src/writing-cases)
+- [Writing Bundles](https://github.com/loadsmith-el/loadsmith-lab/blob/main/docs/src/writing-bundles/bundle-yaml.md)
+- [`case.yaml` schema](https://github.com/loadsmith-el/loadsmith-lab/blob/main/docs/src/reference/case-yaml-schema.md)
+- [`bundle.yaml` schema](https://github.com/loadsmith-el/loadsmith-lab/blob/main/docs/src/reference/bundle-yaml-schema.md)
 
 ## License
 
