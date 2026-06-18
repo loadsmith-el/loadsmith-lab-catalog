@@ -1,0 +1,26 @@
+pipeline:
+  name: sharepoint-list-to-jsonl-smoke
+
+# List mode: the connector resolves the list (mock returns no match → treats
+# `events-list` as an id), then pages through items following @odata.nextLink.
+# List items are already structured, so there is no parser — just the transform
+# chain.
+source:
+  type: sharepoint
+  config:
+    tenant_id: tenant-1
+    client_id: lab
+    client_secret: lab
+    site_id: site-1
+    graph_base_url: http://graph:8080
+    authority_url: http://graph:8080
+    input:
+      kind: list
+      list: events-list
+    transform:
+      - { kind: normalize, columns: true }
+
+destination:
+  type: jsonl
+  config:
+    path: /output/list.jsonl

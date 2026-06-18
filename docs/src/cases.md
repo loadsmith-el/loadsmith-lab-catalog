@@ -18,6 +18,8 @@ a readiness probe and an `expect` block asserting the outcome.
 | `mysql-to-jsonl-tls-require` | Reads 100k rows from MySQL over TLS (`mode: require`) — rustls handshake validation |
 | `mysql-to-mysql` | Loads 100k rows into MySQL (`atomic` mode) — destination smoke test |
 | `mysql-to-mysql-staged-merge` | Loads 100k rows into MySQL via `staged_merge` (ON DUPLICATE KEY upsert by `id`) |
+| `sharepoint-file-to-jsonl` | Downloads a CSV from a mock Microsoft Graph, normalizes columns, writes JSONL (file-mode smoke test) |
+| `sharepoint-list-to-jsonl` | Reads a paginated SharePoint List from a mock Microsoft Graph and writes JSONL (list-mode + pagination smoke test) |
 
 ## Two distinct purposes
 

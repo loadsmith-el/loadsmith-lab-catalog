@@ -1,0 +1,30 @@
+pipeline:
+  name: sharepoint-file-to-jsonl-smoke
+
+# Reads from the mock Graph (alias `graph` on the case network). site_id/drive_id
+# are provided so no resolution round-trips are needed; the connector only hits
+# the token + file `/content` routes. `normalize` exercises the in-plugin
+# transform chain end-to-end (renames columns; row count is unchanged).
+source:
+  type: sharepoint
+  config:
+    tenant_id: tenant-1
+    client_id: lab
+    client_secret: lab
+    site_id: site-1
+    drive_id: drive-1
+    graph_base_url: http://graph:8080
+    authority_url: http://graph:8080
+    batch_size: 5000
+    input:
+      kind: file
+      file: /events.csv
+      parser:
+        kind: csv
+    transform:
+      - { kind: normalize, columns: true }
+
+destination:
+  type: jsonl
+  config:
+    path: /output/events.jsonl

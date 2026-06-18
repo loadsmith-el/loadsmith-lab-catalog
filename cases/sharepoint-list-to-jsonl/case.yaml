@@ -1,0 +1,24 @@
+case:
+  name: sharepoint-list-to-jsonl
+  description: Reads a SharePoint List (two paginated pages) from a mock Microsoft Graph and writes JSONL (list-mode + pagination smoke test)
+  tags: [sharepoint, jsonl, list, smoke]
+
+services:
+  - image: images/lab-mock-graph
+    alias: graph
+    readiness:
+      tcp: 8080
+      timeout_seconds: 120
+
+pipeline:
+  file: pipeline.yaml
+
+# The mock serves 100 list items across two pages (50 + 50, via @odata.nextLink),
+# so a green run proves the list path AND pagination end-to-end.
+expect:
+  status: success
+  rows_read: 100
+  rows_written: 100
+  output:
+    file: list.jsonl
+    row_count: 100

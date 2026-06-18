@@ -1,0 +1,22 @@
+case:
+  name: sharepoint-file-to-jsonl
+  description: Downloads a CSV from a mock Microsoft Graph, normalizes columns, and writes JSONL (file-mode content smoke test)
+  tags: [sharepoint, jsonl, file, smoke]
+
+services:
+  - image: images/lab-mock-graph
+    alias: graph
+    readiness:
+      tcp: 8080
+      timeout_seconds: 120
+
+pipeline:
+  file: pipeline.yaml
+
+expect:
+  status: success
+  rows_read: 100000
+  rows_written: 100000
+  output:
+    file: events.jsonl   # validated under the host side of the /output mount
+    row_count: 100000
